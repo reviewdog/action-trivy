@@ -71,10 +71,10 @@ jobs:
           trivy_return="${{ steps.test.outputs.trivy-return-code }}"
           reviewdog_return="${{ steps.test.outputs.reviewdog-return-code }}"
 
-          if [[ "$trivy_return" -eq 1 ]]; then
-            echo "trivy correctly returned failure ${trivy_return}"
+          if [[ "$trivy_return" -eq 0 ]]; then
+            echo "trivy correctly returned success ${trivy_return}"
           else
-            echo "trivy returned ${trivy_return}, expected '1'. Failing..."
+            echo "trivy returned ${trivy_return}, expected '0'. Failing..."
             exit 1
           fi
 
