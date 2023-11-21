@@ -7,7 +7,7 @@
   },
   diagnostics: [(.Results[]?
     | .Target as $target
-    | .Misconfigurations.[]?
+    | .Misconfigurations[]?
     | .Title as $title | .ID as $id | .PrimaryURL as $primaryURL | .Severity as $severity
     | .CauseMetadata | {
     message: $title,
