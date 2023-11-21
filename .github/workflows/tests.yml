@@ -25,7 +25,44 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
           level: info
-          working_directory: testdata
+          working_directory: testdata/with_detections
+
+      # The check is expected to fail on the test data
+      - name: Check return codes
+        if: success() || failure ()
+        run: |
+          trivy_return="${{ steps.test.outputs.trivy-return-code }}"
+          reviewdog_return="${{ steps.test.outputs.reviewdog-return-code }}"
+
+          if [[ "$trivy_return" -eq 1 ]]; then
+            echo "trivy correctly returned failure ${trivy_return}"
+          else
+            echo "trivy returned ${trivy_return}, expected '1'. Failing..."
+            exit 1
+          fi
+
+          if [[ "$reviewdog_return" -eq 0 ]]; then
+            echo "reviewdog correctly returned success: ${reviewdog_return}"
+          else
+            echo "reviewdog returned ${reviewdog_return}, expected '0'. Failing..."
+            exit 1
+          fi
+
+  test-check-without-detections:
+    name: trivy (github-check-without-detections)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./
+        continue-on-error: true
+        id: test
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          level: info
+          working_directory: testdata/without_detections
 
       # The check is expected to fail on the test data
       - name: Check return codes
@@ -63,7 +100,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: info
-          working_directory: testdata
+          working_directory: testdata/with_detections
 
       # The check is expected to fail on the test data
       - name: Check return codes
@@ -101,7 +138,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: info
-          working_directory: testdata
+          working_directory: testdata/with_detections
 
       # The check is expected to fail on the test data
       #  but for forked PRs reviewdog will just output
@@ -144,7 +181,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
           level: info
-          working_directory: testdata
+          working_directory: testdata/with_detections
 
       # The check is expected to fail on the test data
       - name: Check return codes
