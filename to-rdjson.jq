@@ -5,11 +5,9 @@
     name: "trivy",
     url: "https://github.com/aquasecurity/trivy"
   },
-  diagnostics: [(.Results[]
+  diagnostics: [(.Results[]?
     | .Target as $target
-    | .Misconfigurations
-    | select(. != null)
-    | .[]
+    | .Misconfigurations.[]?
     | .Title as $title | .ID as $id | .PrimaryURL as $primaryURL | .Severity as $severity
     | .CauseMetadata | {
     message: $title,
