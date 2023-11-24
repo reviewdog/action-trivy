@@ -1,10 +1,10 @@
 # GitHub Action: Run trivy with reviewdog
 
-[![Tests](https://github.com/reviewdog/action-tfsec/workflows/Tests/badge.svg)](https://github.com/reviewdog/action-tfsec/actions?query=workflow%3ATests)
-[![Lint](https://github.com/reviewdog/action-tfsec/workflows/Lint/badge.svg)](https://github.com/reviewdog/action-tfsec/actions?query=workflow%Lint)
-[![depup](https://github.com/reviewdog/action-tfsec/workflows/depup/badge.svg)](https://github.com/reviewdog/action-tfsec/actions?query=workflow%3Adepup)
-[![release](https://github.com/reviewdog/action-tfsec/workflows/release/badge.svg)](https://github.com/reviewdog/action-tfsec/actions?query=workflow%3Arelease)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-tfsec?logo=github&sort=semver)](https://github.com/reviewdog/action-tfsec/releases)
+[![Tests](https://github.com/reviewdog/action-trivy/workflows/Tests/badge.svg)](https://github.com/reviewdog/action-trivy/actions?query=workflow%3ATests)
+[![Lint](https://github.com/reviewdog/action-trivy/workflows/Lint/badge.svg)](https://github.com/reviewdog/action-trivy/actions?query=workflow%Lint)
+[![depup](https://github.com/reviewdog/action-trivy/workflows/depup/badge.svg)](https://github.com/reviewdog/action-trivy/actions?query=workflow%3Adepup)
+[![release](https://github.com/reviewdog/action-trivy/workflows/release/badge.svg)](https://github.com/reviewdog/action-trivy/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-trivy?logo=github&sort=semver)](https://github.com/reviewdog/action-trivy/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 This action runs [trivy](https://github.com/aquasecurity/trivy) with
@@ -77,7 +77,7 @@ The default is ``.
 
 ### `trivy_version`
 
-Optional. The version of tfsec to install.
+Optional. The version of trivy to install.
 The default is `latest`.
 
 ### `trivy_flags`
