@@ -23,6 +23,7 @@ jobs:
         id: test
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config
           reporter: github-check
           level: info
           working_directory: testdata/with_detections
@@ -60,6 +61,7 @@ jobs:
         id: test
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config
           reporter: github-check
           level: info
           working_directory: testdata/without_detections
@@ -98,6 +100,7 @@ jobs:
         id: test
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config
           reporter: github-pr-check
           level: info
           working_directory: testdata/with_detections
@@ -136,6 +139,7 @@ jobs:
         id: test
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config
           reporter: github-pr-review
           level: info
           working_directory: testdata/with_detections
@@ -179,6 +183,7 @@ jobs:
         id: test
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config
           reporter: github-check
           level: info
           working_directory: testdata/with_detections

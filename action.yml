@@ -51,6 +51,10 @@ inputs:
       Default is latest.
     default: 'latest'
     required: false
+  trivy_command:
+    description: |
+      Trivy command
+    required: true
   trivy_flags:
     description: |
       List of arguments to send to trivy
@@ -88,6 +92,7 @@ runs:
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_FLAGS: ${{ inputs.flags }}
         INPUT_TRIVY_VERSION: ${{ inputs.trivy_version }}
+        INPUT_TRIVY_COMMAND: ${{ inputs.trivy_command }}
         INPUT_TRIVY_FLAGS: ${{ inputs.trivy_flags }}
 
 branding:
