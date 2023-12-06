@@ -33,6 +33,10 @@ the Pull Request Conversation:
 
 **Required**. Must be in form of `github_token: ${{ secrets.github_token }}`.
 
+### `trivy_command`
+
+**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`.
+
 ### `working_directory`
 
 Optional. Directory to run the action on, from the repo root.
