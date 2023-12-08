@@ -33,6 +33,16 @@ the Pull Request Conversation:
 
 **Required**. Must be in form of `github_token: ${{ secrets.github_token }}`.
 
+### `trivy_command`
+
+**Required**. Trivy command [`aws`, `config`, `filesystem`,  `image`, `kubernetes`, `rootfs`, `sbom`, `vm`].
+You can see this with `trivy --help`
+
+### `trivy_target`
+
+**Required**. Target to scan.
+It's depends on the command. Please check [Trivy Docs](https://aquasecurity.github.io/trivy/latest/docs/)
+
 ### `working_directory`
 
 Optional. Directory to run the action on, from the repo root.

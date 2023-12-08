@@ -45,6 +45,14 @@ inputs:
     description: 'Additional reviewdog flags'
     default: ''
     required: false
+  trivy_command:
+    description: |
+      Trivy command [aws,config,filesystem,image,kubernetes,rootfs,sbom,vm]
+    required: true
+  trivy_target:
+    description: |
+      Trivy target to scan
+    required: true
   trivy_version:
     description: |
       The version of trivy to install.
@@ -88,6 +96,8 @@ runs:
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_FLAGS: ${{ inputs.flags }}
         INPUT_TRIVY_VERSION: ${{ inputs.trivy_version }}
+        INPUT_TRIVY_COMMAND: ${{ inputs.trivy_command }}
+        INPUT_TRIVY_TARGET: ${{ inputs.trivy_target }}
         INPUT_TRIVY_FLAGS: ${{ inputs.trivy_flags }}
 
 branding:
