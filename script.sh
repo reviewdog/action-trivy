@@ -81,6 +81,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
+  #TODO: git diff subfolder then run trivy with trigy target as subfolder
   # shellcheck disable=SC2086
   "${TRIVY_PATH}/trivy" --format json ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
     | jq -r -f "${GITHUB_ACTION_PATH}/to-rdjson.jq" \
