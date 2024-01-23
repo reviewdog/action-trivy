@@ -121,7 +121,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run trivy with reviewdog output on the PR
-        uses: reviewdog/action-trivy@master
+        uses: reviewdog/action-trivy@v1
         with:
           github_token: ${{ secrets.github_token }}
           working_directory: my_directory # Change working directory
