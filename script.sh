@@ -46,6 +46,10 @@ echo '::endgroup::'
 echo "::group:: Installing trivy (${INPUT_TRIVY_VERSION}) ... https://github.com/aquasecurity/trivy"
   test ! -d "${TRIVY_PATH}" && install -d "${TRIVY_PATH}"
 
+  PREV_DIR=$(pwd)
+  TEMP_DOWNLOAD_PATH="$(mktemp -d)"
+  cd "${TEMP_DOWNLOAD_PATH}" || exit
+
   archive="trivy.${archive_extension}"
   if [[ "${INPUT_TRIVY_VERSION}" = "latest" ]]; then
     # latest release is available on this url.
@@ -58,17 +62,23 @@ echo "::group:: Installing trivy (${INPUT_TRIVY_VERSION}) ... https://github.com
   release_num=${release/#v/}
   url="https://github.com/aquasecurity/trivy/releases/download/${release}/trivy_${release_num}_${os}-${arch}.${archive_extension}"
   # Echo url for testing
-  echo "Downloading ${url}"
-
+  echo "Downloading ${url} to ${archive}"
   curl --silent --show-error --fail \
     --location "${url}" \
     --output "${archive}"
+
+  ### TEST
+  echo "URL: ${url}"
+  echo "ARCHIVE: ${archive}"
+  ls 
+  ### TEST END
   if [[ "${os}" = "Windows" ]]; then
     unzip "${archive}"
   else
     tar -xzf "${archive}"
   fi
   install trivy "${TRIVY_PATH}"
+  cd "${PREV_DIR}" || exit
 echo '::endgroup::'
 
 echo "::group:: Print trivy details ..."
