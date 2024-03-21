@@ -5,6 +5,16 @@ if [[ "$RUNNER_DEBUG" = "1" ]]; then
   set -x
 fi
 
+if [[ -z "${INPUT_TRIVY_COMMAND}" ]]; then
+  echo "Error: Missing required input 'trivy_command'."
+  exit 1
+fi
+
+if [[ -z "${INPUT_TRIVY_TARGET}" ]]; then
+  echo "Error: Missing required input 'trivy_target'."
+  exit 1
+fi
+
 # Fail fast on errors, unset variables, and failures in piped commands
 set -Eeuo pipefail
 
