@@ -124,6 +124,8 @@ jobs:
         uses: reviewdog/action-trivy@v1
         with:
           github_token: ${{ secrets.github_token }}
+          trivy_command: config # Change trivy command
+          trivy_target: . # Change trivy target directory
           working_directory: my_directory # Change working directory
           level: info # Get more output from reviewdog
           reporter: github-pr-review # Change reviewdog reporter
