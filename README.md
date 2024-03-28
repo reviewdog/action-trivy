@@ -31,42 +31,48 @@ the Pull Request Conversation:
 
 ### `github_token`
 
-**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`.
+**Required**.
+
+The default is `${{ github.token }}`.
 
 ### `trivy_command`
 
-**Required**. Trivy command [`aws`, `config`, `filesystem`,  `image`, `kubernetes`, `rootfs`, `sbom`, `vm`].
+**Required**. Trivy command [`aws`, `config`, `filesystem`, `image`, `kubernetes`, `rootfs`, `sbom`, `vm`].
 You can see this with `trivy --help`
 
 ### `trivy_target`
 
 **Required**. Target to scan.
-It's depends on the command. Please check [Trivy Docs](https://aquasecurity.github.io/trivy/latest/docs/)
+Varies depending on the `trivy_command` chosen. Please check [Trivy Docs](https://aquasecurity.github.io/trivy/latest/docs/)
 
 ### `working_directory`
 
 Optional. Directory to run the action on, from the repo root.
-The default is `.` ( root of the repository).
+
+The default is `.` (root of the repository).
 
 ### `level`
 
-Optional. Report level for reviewdog [`info`,`warning`,`error`].
+Optional. Report level for reviewdog [`info`, `warning`, `error`].
 It's same as `-level` flag of reviewdog.
+
 The default is `error`.
 
 ### `tool_name`
 
 Optional. Name of the tool being used. This controls how it will show up in the GitHub UI.
+
 The default is `trivy`.
 
 ### `reporter`
 
-Optional. Reporter of reviewdog command [`github-pr-check`,`github-pr-review`].
+Optional. Reporter of reviewdog command [`github-pr-check`, `github-pr-review`].
+
 The default is `github-pr-check`.
 
 ### `filter_mode`
 
-Optional. Filtering for the reviewdog command [`added`,`diff_context`,`file`,`nofilter`].
+Optional. Filtering for the reviewdog command [`added`, `diff_context`, `file`, `nofilter`].
 
 The default is `added`.
 
@@ -74,7 +80,7 @@ See [reviewdog documentation for filter mode](https://github.com/reviewdog/revie
 
 ### `fail_on_error`
 
-Optional. Exit code for reviewdog when errors are found [`true`,`false`].
+Optional. Exit code for reviewdog when errors are found [`true`, `false`].
 
 The default is `false`.
 
@@ -83,17 +89,19 @@ See [reviewdog documentation for exit codes](https://github.com/reviewdog/review
 ### `flags`
 
 Optional. Additional reviewdog flags. Useful for debugging errors, when it can be set to `-tee`.
+
 The default is ``.
 
 ### `trivy_version`
 
 Optional. The version of trivy to install.
+
 The default is `latest`.
 
 ### `trivy_flags`
 
 Optional. List of arguments to send to trivy.
-For the output to be parsable by reviewdog [`--format=checkstyle` is enforced](./entrypoint.sh).
+
 The default is ``.
 
 ## Outputs

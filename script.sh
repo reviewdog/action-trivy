@@ -102,9 +102,8 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
   set +Eeuo pipefail
 
   # shellcheck disable=SC2086
-  "${TRIVY_PATH}/trivy" --format json ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
-    | jq -r -f "${GITHUB_ACTION_PATH}/to-rdjson.jq" \
-    |  "${REVIEWDOG_PATH}/reviewdog" -f=rdjson \
+  "${TRIVY_PATH}/trivy" --format sarif ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
+    |  "${REVIEWDOG_PATH}/reviewdog" -f=sarif \
         -name="${INPUT_TOOL_NAME}" \
         -reporter="${INPUT_REPORTER}" \
         -level="${INPUT_LEVEL}" \
@@ -112,7 +111,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
         -filter-mode="${INPUT_FILTER_MODE}" \
         ${INPUT_FLAGS}
 
-  trivy_return="${PIPESTATUS[0]}" reviewdog_return="${PIPESTATUS[2]}" exit_code=$?
+  trivy_return="${PIPESTATUS[0]}" reviewdog_return="${PIPESTATUS[1]}" exit_code=$?
   echo "trivy-return-code=${trivy_return}" >> "$GITHUB_OUTPUT"
   echo "reviewdog-return-code=${reviewdog_return}" >> "$GITHUB_OUTPUT"
 echo '::endgroup::'
