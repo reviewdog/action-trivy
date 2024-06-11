@@ -5,6 +5,16 @@ if [[ "$RUNNER_DEBUG" = "1" ]]; then
   set -x
 fi
 
+if [[ -z "${INPUT_TRIVY_COMMAND}" ]]; then
+  echo "Error: Missing required input 'trivy_command'."
+  exit 1
+fi
+
+if [[ -z "${INPUT_TRIVY_TARGET}" ]]; then
+  echo "Error: Missing required input 'trivy_target'."
+  exit 1
+fi
+
 # Fail fast on errors, unset variables, and failures in piped commands
 set -Eeuo pipefail
 
@@ -46,6 +56,10 @@ echo '::endgroup::'
 echo "::group:: Installing trivy (${INPUT_TRIVY_VERSION}) ... https://github.com/aquasecurity/trivy"
   test ! -d "${TRIVY_PATH}" && install -d "${TRIVY_PATH}"
 
+  PREV_DIR=$(pwd)
+  TEMP_DOWNLOAD_PATH="$(mktemp -d)"
+  cd "${TEMP_DOWNLOAD_PATH}" || exit
+
   archive="trivy.${archive_extension}"
   if [[ "${INPUT_TRIVY_VERSION}" = "latest" ]]; then
     # latest release is available on this url.
@@ -58,17 +72,23 @@ echo "::group:: Installing trivy (${INPUT_TRIVY_VERSION}) ... https://github.com
   release_num=${release/#v/}
   url="https://github.com/aquasecurity/trivy/releases/download/${release}/trivy_${release_num}_${os}-${arch}.${archive_extension}"
   # Echo url for testing
-  echo "Downloading ${url}"
-
+  echo "Downloading ${url} to ${archive}"
   curl --silent --show-error --fail \
     --location "${url}" \
     --output "${archive}"
+
+  ### TEST
+  echo "URL: ${url}"
+  echo "ARCHIVE: ${archive}"
+  ls 
+  ### TEST END
   if [[ "${os}" = "Windows" ]]; then
     unzip "${archive}"
   else
     tar -xzf "${archive}"
   fi
   install trivy "${TRIVY_PATH}"
+  cd "${PREV_DIR}" || exit
 echo '::endgroup::'
 
 echo "::group:: Print trivy details ..."
@@ -82,9 +102,8 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
   set +Eeuo pipefail
 
   # shellcheck disable=SC2086
-  "${TRIVY_PATH}/trivy" --format json ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
-    | jq -r -f "${GITHUB_ACTION_PATH}/to-rdjson.jq" \
-    |  "${REVIEWDOG_PATH}/reviewdog" -f=rdjson \
+  "${TRIVY_PATH}/trivy" --format sarif ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
+    |  "${REVIEWDOG_PATH}/reviewdog" -f=sarif \
         -name="${INPUT_TOOL_NAME}" \
         -reporter="${INPUT_REPORTER}" \
         -level="${INPUT_LEVEL}" \
@@ -92,7 +111,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
         -filter-mode="${INPUT_FILTER_MODE}" \
         ${INPUT_FLAGS}
 
-  trivy_return="${PIPESTATUS[0]}" reviewdog_return="${PIPESTATUS[2]}" exit_code=$?
+  trivy_return="${PIPESTATUS[0]}" reviewdog_return="${PIPESTATUS[1]}" exit_code=$?
   echo "trivy-return-code=${trivy_return}" >> "$GITHUB_OUTPUT"
   echo "reviewdog-return-code=${reviewdog_return}" >> "$GITHUB_OUTPUT"
 echo '::endgroup::'
