@@ -54,11 +54,6 @@ jobs:
           reporter: github-check
           level: info
           working_directory: ${{ matrix.dir }}
-          # Below are for testing purposes
-          filter_mode: nofilter # Check all files, not just the diff
-          fail_on_error: false # Fail action if errors are found
-          flags: -tee # Add debug flag to reviewdog
-          trivy_flags: "" # Optional
 
       # The check is expected to fail on the test data
       - name: Check return codes
