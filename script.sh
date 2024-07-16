@@ -102,7 +102,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
   set +Eeuo pipefail
 
   # shellcheck disable=SC2086
-  "${TRIVY_PATH}/trivy" --format sarif ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
+  "${TRIVY_PATH}/trivy" --format sarif ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_TARGET} 2> /dev/null \
     |  "${REVIEWDOG_PATH}/reviewdog" -f=sarif \
         -name="${INPUT_TOOL_NAME}" \
         -reporter="${INPUT_REPORTER}" \
