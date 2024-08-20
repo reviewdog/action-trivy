@@ -28,6 +28,9 @@ jobs:
               DIRS_RESULT="${DIRS_RESULT}${dir},"
             fi
           done
+
+          # Build actions' matrix from testadata dirs
+          # e.x. ./testdata/config/terraform/with_detections => { "dir": "./testdata/config/terraform/with_detections", "command": "config", "type": "with_detections", "label": "config/terraform" }
           MATRIX_JSON=$(echo "${DIRS_RESULT}" | sed 's/,$//' | sed 's/\\n//g' | jq -R -s -c 'split(",") | [.[] | {dir: ., command: split("/")[2], type: split("/")[4], label: [split("/")[2],split("/")[3]] | join("/")}]')
           MATRIX="matrix={\"include\":${MATRIX_JSON}}" >> $GITHUB_OUTPUT
           echo "${MATRIX}"
