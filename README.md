@@ -145,6 +145,18 @@ jobs:
 
 ## Development
 
+### Tests
+
+#### GitHub Actions
+
+You can add the test files under the `./testdata` without any other changes. You need to create a directory with following naming rules and put the test files.
+
+```
+./testdata/<trivy_target>/<data_type>/[with_detecitons|without_detections]
+```
+
+For example, files in `./testdata/config/terraform/without_detecions` runs `trivy config ./testdata/config/terraform/without_detections` expecting without any detections.
+
 ### Release
 
 #### [haya14busa/action-bumpr](https://github.com/haya14busa/action-bumpr)
