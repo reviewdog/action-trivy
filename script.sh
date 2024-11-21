@@ -34,6 +34,7 @@ echo '::group::Preparing ...'
   unameArch="$(uname -m)"
   case "${unameArch}" in
     x86*)      arch=64bit;;
+    aarch64)   arch=ARM64;;
     arm64)     arch=ARM64;;
     *)         echo "Unsupported architecture: ${unameArch}. Only AMD64 and ARM64 are supported by the action" && exit 1
     esac
