@@ -80,11 +80,21 @@ See [reviewdog documentation for filter mode](https://github.com/reviewdog/revie
 
 ### `fail_on_error`
 
+**Deprecated**. This option is no longer recommended for use and will be removed in future versions.
+
 Optional. Exit code for reviewdog when errors are found [`true`, `false`].
 
 The default is `false`.
 
 See [reviewdog documentation for exit codes](https://github.com/reviewdog/reviewdog/tree/master#exit-codes) for details.
+
+### `fail_level`
+
+Optional. The level of failures that will cause the action to fail [any,info,warning,error].
+
+The default is `error`.
+
+See [reviewdog documentation for fail level](https://github.com/reviewdog/reviewdog/tree/master?tab=readme-ov-file#fail-level) for details.
 
 ### `flags`
 
@@ -139,6 +149,7 @@ jobs:
           reporter: github-pr-review # Change reviewdog reporter
           filter_mode: nofilter # Check all files, not just the diff
           fail_on_error: true # Fail action if errors are found
+          fail_level: any # Fail action if any level of failures are found
           flags: -tee # Add debug flag to reviewdog
           trivy_flags: "" # Optional
 ```

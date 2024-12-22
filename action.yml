@@ -35,12 +35,20 @@ inputs:
       Default is added.
     default: 'added'
     required: false
+  fail_level:
+    description: |
+      The level of failures that will cause the action to fail [any,info,warning,error]
+      Default is error.
+    default: ''
+    required: false
   fail_on_error:
     description: |
+      **Deprecated**. This option is no longer recommended for use and will be removed in future versions.
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
     default: 'false'
     required: false
+    deprecated: true
   flags:
     description: 'Additional reviewdog flags'
     default: ''
@@ -94,6 +102,7 @@ runs:
         INPUT_TOOL_NAME: ${{ inputs.tool_name }}
         INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
         INPUT_FLAGS: ${{ inputs.flags }}
         INPUT_TRIVY_VERSION: ${{ inputs.trivy_version }}
         INPUT_TRIVY_COMMAND: ${{ inputs.trivy_command }}
