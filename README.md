@@ -90,9 +90,9 @@ See [reviewdog documentation for exit codes](https://github.com/reviewdog/review
 
 ### `fail_level`
 
-Optional. The level of failures that will cause the action to fail [any,info,warning,error].
+Optional. If set to none, always use exit code 0 for reviewdog. Otherwise, exit code 1 for reviewdog if it finds at least 1 issue with severity greater than or equal to the given level. Possible values: [none, any, info, warning, error] Default is none.
 
-The default is `error`.
+The default is `none`.
 
 See [reviewdog documentation for fail level](https://github.com/reviewdog/reviewdog/tree/master?tab=readme-ov-file#fail-level) for details.
 
