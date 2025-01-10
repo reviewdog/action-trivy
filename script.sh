@@ -99,16 +99,6 @@ echo '::endgroup::'
 echo '::group:: Running trivy with reviewdog 🐶 ...'
   export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-  if [[ -n "${INPUT_FAIL_LEVEL}" ]]; then
-    fail_level="--fail-level=${INPUT_FAIL_LEVEL}"
-  elif [[ "${INPUT_FAIL_ON_ERROR}" = "true" ]]; then
-    # For backward compatibility, default to any if fail-on-error is true
-    # Deprecated
-    fail_level="--fail-level=any"
-  else
-    fail_level=""
-  fi
-
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
@@ -118,7 +108,8 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
         -name="${INPUT_TOOL_NAME}" \
         -reporter="${INPUT_REPORTER}" \
         -level="${INPUT_LEVEL}" \
-        ${fail_level} \
+        -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+        -fail-level="${INPUT_FAIL_LEVEL}" \
         -filter-mode="${INPUT_FILTER_MODE}" \
         ${INPUT_FLAGS}
 
