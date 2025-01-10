@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Print commands for debugging
-if [[ "$RUNNER_DEBUG" = "1" ]]; then
+if [[ "$RUNNER_DEBUG" = "1" || "$INPUT_ENABLE_DEBUG" = "true" ]]; then
   set -x
 fi
 
@@ -102,6 +102,10 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
   # Allow failures now, as reviewdog handles them
   set +Eeuo pipefail
 
+  if [[ "$INPUT_ENABLE_DEBUG" = "true" ]]; then
+    REVIEWDOG_ADDITIONAL_FLAGS="-tee"
+  fi
+
   # shellcheck disable=SC2086
   "${TRIVY_PATH}/trivy" --format sarif ${INPUT_TRIVY_FLAGS:-} --exit-code 1 ${INPUT_TRIVY_COMMAND} ${INPUT_TRIVY_TARGET} 2> /dev/null \
     |  "${REVIEWDOG_PATH}/reviewdog" -f=sarif \
@@ -110,6 +114,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
         -level="${INPUT_LEVEL}" \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
         -filter-mode="${INPUT_FILTER_MODE}" \
+        ${REVIEWDOG_FLAGS} \
         ${INPUT_FLAGS}
 
   trivy_return="${PIPESTATUS[0]}" reviewdog_return="${PIPESTATUS[1]}" exit_code=$?

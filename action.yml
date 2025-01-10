@@ -66,6 +66,11 @@ inputs:
       Default is blank.
     default: ''
     required: false
+  enable_debug:
+    description: |
+      Enable debug mode (add -x option to shell script and -tee option to reviewdog)
+    default: false
+    required: false
 
 outputs:
   trivy-return-code:
@@ -99,7 +104,7 @@ runs:
         INPUT_TRIVY_COMMAND: ${{ inputs.trivy_command }}
         INPUT_TRIVY_TARGET: ${{ inputs.trivy_target }}
         INPUT_TRIVY_FLAGS: ${{ inputs.trivy_flags }}
-
+        INPUT_ENABLE_DEBUG: ${{ inputs.enable_debug }}
 branding:
   icon: 'edit'
   color: 'gray-dark'
