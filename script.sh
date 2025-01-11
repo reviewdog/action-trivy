@@ -109,6 +109,7 @@ echo '::group:: Running trivy with reviewdog 🐶 ...'
         -reporter="${INPUT_REPORTER}" \
         -level="${INPUT_LEVEL}" \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+        -fail-level="${INPUT_FAIL_LEVEL}" \
         -filter-mode="${INPUT_FILTER_MODE}" \
         ${INPUT_FLAGS}
 
