@@ -114,6 +114,18 @@ Optional. List of arguments to send to trivy.
 
 The default is ``.
 
+### `trivy_checksum`
+
+Optional. Expected SHA256 checksum of the downloaded trivy release. Used to verify the download before extraction to protect against supply chain attacks.
+
+The action automatically looks up the checksum from [`trivy_checksums.txt`](./trivy_checksums.txt) in this repository, which covers all known trivy releases. If a match is found there, no configuration is needed. If no match is found, a warning is printed and extraction proceeds unverified.
+
+Use this input to provide a checksum manually when pinning a trivy version that is not yet configured in `trivy_checksums.txt`, for example shortly after a new trivy release before this repository has been updated.
+
+Note: trivy releases differ per OS and architecture, so the expected checksum will vary depending on the runner platform. Checksums for each release are published by trivy in `trivy_<version>_checksums.txt` on the [trivy releases page](https://github.com/aquasecurity/trivy/releases). `trivy_checksums.txt` is updated via [`scripts/update-trivy-checksums.sh`](./scripts/update-trivy-checksums.sh).
+
+The default is ``.
+
 ## Outputs
 
 ## `trivy-return-code`
@@ -152,6 +164,8 @@ jobs:
           fail_level: any # Fail action if any level of failures are found
           flags: -tee # Add debug flag to reviewdog
           trivy_flags: "" # Optional
+          # trivy_version: v0.70.0 # Optional: pin to a specific version
+          # trivy_checksum: "" # Optional: override checksum lookup from trivy_checksums.txt
 ```
 
 ## Development
