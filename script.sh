@@ -39,7 +39,7 @@ echo '::group::Preparing ...'
     *)         echo "Unsupported architecture: ${unameArch}. Only AMD64 and ARM64 are supported by the action" && exit 1
     esac
 
-  case "${os}" in 
+  case "${os}" in
     Windows)   archive_extension="zip";;
     *)         archive_extension="tar.gz";;
   esac
@@ -81,8 +81,55 @@ echo "::group:: Installing trivy (${INPUT_TRIVY_VERSION}) ... https://github.com
   ### TEST
   echo "URL: ${url}"
   echo "ARCHIVE: ${archive}"
-  ls 
+  ls
   ### TEST END
+
+  checksum_key="${url##*/}"
+  input_checksum="${INPUT_TRIVY_CHECKSUM:-}"
+
+  # Resolve the expected checksum: prefer user-supplied value, fall back to the bundled lookup table
+  if [[ -n "${input_checksum}" ]]; then
+    # Case 1: user provided a checksum explicitly, use it
+    checksum="${input_checksum}"
+  else
+    # Case 2: no user-provided checksum, look up from trivy_checksums.txt
+    stored_checksum=$(grep -m1 -F "${checksum_key}:" "${GITHUB_ACTION_PATH}/trivy_checksums.txt" | awk '{print $2}' || true)
+    if [[ -z "${stored_checksum}" ]]; then
+      # Case 2.1: not found in trivy_checksums.txt
+      echo "WARNING: Skipping integrity check, set 'trivy_checksum' to verify the download."
+      checksum=""
+    else
+      # Case 2.2: found in trivy_checksums.txt
+      checksum="${stored_checksum}"
+    fi
+  fi
+
+  # compare trivy checksum against the downloaded package
+  if [[ -n "${checksum}" ]]; then
+    echo "Verifying SHA256 checksum ..."
+    if command -v sha256sum &>/dev/null; then
+      # Linux (coreutils) and Windows Git Bash (mingw-w64-x86_64-coreutils)
+      actual=$(sha256sum "${archive}" | awk '{print $1}')
+    elif command -v shasum &>/dev/null; then
+      # macOS (perl-based shasum, ships with Xcode CLI tools)
+      actual=$(shasum -a 256 "${archive}" | awk '{print $1}')
+    else
+      echo "ERROR: No SHA256 tool found (sha256sum / shasum)"
+      exit 1
+    fi
+
+    if [[ "${actual}" != "${checksum}" ]]; then
+      echo ""
+      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      echo "!! ERROR: SHA256 checksum verification FAILED               !!"
+      echo "!! The downloaded trivy release may have been tampered with. !!"
+      echo "!! Do NOT use this binary.                                   !!"
+      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      echo ""
+      exit 1
+    fi
+  fi
+
   if [[ "${os}" = "Windows" ]]; then
     unzip "${archive}"
   else
