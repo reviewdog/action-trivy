@@ -8,8 +8,7 @@
   "packageRules": [
     {
       "matchFileNames": [
-        ".github/workflows/**",
-        "testdata/**"
+        ".github/workflows/**"
       ],
       "labels": []
     },
