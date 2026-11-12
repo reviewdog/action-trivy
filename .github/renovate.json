@@ -8,10 +8,16 @@
   "packageRules": [
     {
       "matchFileNames": [
-        ".github/workflows/**",
-        "testdata/**"
+        ".github/workflows/**"
       ],
       "labels": []
+    },
+    {
+      "description": "testdata intentionally pins vulnerable versions for trivy detection tests",
+      "matchFileNames": [
+        "testdata/**"
+      ],
+      "enabled": false
     }
   ]
 }
